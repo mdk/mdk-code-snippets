@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/atom10full.xsl" type="text/xsl" media="screen"?><?xml-stylesheet href="http://feeds.feedburner.com/~d/styles/itemcontent.css" type="text/css" media="screen"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+  <title>MDK - Log</title>
+  <id>tag:www.mdk.org.pl,2007:mephisto/</id>
+  <generator uri="http://mephistoblog.com" version="0.7.3">Mephisto Noh-Varr</generator>
+  
+  <link href="http://www.mdk.org.pl/" rel="alternate" type="text/html" />
+  <updated>2007-11-26T23:37:18Z</updated>
+  <link rel="self" href="http://feeds.feedburner.com/Mdk" type="application/atom+xml" /><entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-11-26:511</id>
+    <published>2007-11-26T23:34:00Z</published>
+    <updated>2007-11-26T23:34:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/11/26/on-gnome-mobile" rel="alternate" type="text/html" />
+    <title>On GNOME mobile</title>
+<content type="html">
+            &lt;p&gt;&lt;a href="http://www.murrayc.com/blog/permalink/2007/11/26/gnome-board-2007-candidates-the-bad/"&gt;Murray writes&lt;/a&gt; about &lt;a href="http://www.gnome.org/mobile/"&gt;GNOME mobile&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The is currently most obvious in the GMAE (or GNOME Mobile) group, which Jeff insists on controlling, which the board allowed despite knowing what would happen. After almost two years it has produced nothing more than a press release announcing its existence, and that happened six months later than the members wanted.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I don’t think &lt;a href="http://perkypants.org/"&gt;Jeff&lt;/a&gt; is to be blamed here first. I don’t know about other players involved but I personally feel that we at &lt;a href="http://www.nokia.com"&gt;nokia&lt;/a&gt; simply didn’t put enough effort into GNOME mobile. &lt;/p&gt;
+
+&lt;p&gt;This is to be read carefully. We did put &lt;strong&gt;a lot&lt;/strong&gt; of serious work (directly and indirectly) into &lt;a href="http://www.gnome.org"&gt;GNOME&lt;/a&gt; and various GNOME mobile components. A lot of those efforts are invisible. Where we so far failed is to make this work standardized, reusable and transparent – what (if I understand correctly) was the original goal of the GNOME mobile. &lt;/p&gt;
+
+&lt;p&gt;Hopefully this can be changed. But I don’t think it’s fair to blame Jeff for this particular issue.&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-11-17:497</id>
+    <published>2007-11-17T13:37:00Z</published>
+    <updated>2007-11-17T13:37:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/11/17/gl-colorspace-conversions" rel="alternate" type="text/html" />
+    <title>GL colorspace conversions</title>
+<content type="html">
+            &lt;p&gt;A fellow sushi-lover &lt;a href="http://macslow.thepimp.net/"&gt;MacSlow&lt;/a&gt; was blogging some time ago about &lt;a href="http://macslow.thepimp.net/?p=123"&gt;various cool things that can be done with OpenGL and video&lt;/a&gt;. Mirco writes:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;”The remaining things to implement are: using fragment-shaders for the colorspace-conversion too, hooking up some implicit-animation love for switching between different videos.”&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I’d like to pick a little bit on the first part of his todo (using hardware-accelerated colorspace conversions). &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/11/17/yuv-screenshot.png" /&gt;&lt;/p&gt;
+
+&lt;h2&gt;RGB vs. YUV&lt;/h2&gt;
+
+&lt;p&gt;Computer graphics is an RGB-world. Every point/pixel on the screen is represented by an intensity of red, green and blue. Any visible color can be coded with a combination of those three values. RGB is the way to specify colors in various drawing API’s, HTML color coding, etc. However – RGB gamut is not modeling well the way human eye works. Our perception has certain characteristics that are not well expressed in the RGB universe. For example – a human eye is very sensitive to changes in lightness (intensity) but is not very keen on noticing differences between dark shades of blue. This is where &lt;a href="http://en.wikipedia.org/wiki/YUV"&gt;YUV&lt;/a&gt; colorspace kicks in. YUV (just like RGB) can be used to represent any color but the representation is more interesting from the video compression point of view – which is mostly about benefiting from the imperfections in our sight.&lt;/p&gt;
+
+&lt;p&gt;In YUV colors are represented by luminance (Y) and two chrominance components (U and V). For example, in RGB the white color is represented with [1.0; 1.0; 1.0] triple while in YUV it would be a [1.0; 0.0; 0.0] set. In a way YUV predates RGB and computers as it’s the format used in the analog TV (the cable essentially contains YUV signals at different bands).&lt;/p&gt;
+
+&lt;h2&gt;Conversion&lt;/h2&gt;
+
+&lt;p&gt;The reason why YUV is important is that it’s used as the native format in video compression. The raw (fast) output we get from a modern video decoder is a (some kind of) YUV buffer. YUV can be fairly easily converted to RGB (and vice versa) but it comes at a price. Since it’s a per-pixel operation the processing time gets steep fast. With high-resolution DVD-quality video we’re talking about ~10 million points per second. With numbers like that &lt;strong&gt;any&lt;/strong&gt; operation becomes a bottleneck. Since in the end we somehow need to get the RGB representation, the only thing we can do is delegate the conversion from the CPU to the graphical hardware. &lt;/p&gt;
+
+&lt;h2&gt;Overlays to the rescue&lt;/h2&gt;
+
+&lt;p&gt;The traditional way of dealing with this problem was to use overlay capabilities of the graphics board. Overlays are around since long time (way longer than 3d acceleration) and are fairly well established. Overlays, being a hardware capability, allow us to “take over” a certain (more or less rectangular) area of the screen and dump there some pixel data – bypassing the traditional drawing pipeline. The data pushed can be in YUV format. Modern graphics hardware supports all popular YUV formats and the conversion is handled by the hardware.&lt;/p&gt;
+
+&lt;p&gt;The limitation of this approach is that the video (overlay) is not really a first-class citizen in the UI pipeline. It’s something that is (simplification here) “burnt over” other elements of the UI. We can’t transform it, we can’t use it in the 3d/2d effects pipeline and it’s problematic (slow) to draw over it (think transparent playback controls drawn over playing video). Overlays are more than enough for implementing standard desktop players but are useless when we want to do more fancy stuff. &lt;/p&gt;
+
+&lt;p&gt;For the fancy effects we want to use video as a native texture/source image while &lt;strong&gt;still&lt;/strong&gt; delegating the colorspace conversion to the hardware. OpenGL API/pipeline does not support YUV formats but we can easily fix that with custom GPU code. &lt;/p&gt;
+
+&lt;h2&gt;YUV formats&lt;/h2&gt;
+
+&lt;p&gt;One problem with YUV is that it comes in different flavors (formats) and there are quite many of them. &lt;a href="http://www.fourcc.org"&gt;FourCC&lt;/a&gt; website &lt;a href="http://www.fourcc.org/yuv.php"&gt;has a good overview&lt;/a&gt;. The good thing is that there are just a couple of popular formats used in practice and the huge rest is mostly exotic or legacy. &lt;/p&gt;
+
+&lt;p&gt;Let’s take a quick look at the popular IYUV/I420 format we get from a &lt;a href="http://www.divx.com/"&gt;DivX&lt;/a&gt; decoder. It’s a planar format which means that (unlike most RGB formats) the components are &lt;strong&gt;not&lt;/strong&gt; interleaved. We can graphically represent an I420 buffer:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/11/17/yuv-buffer.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The buffer contains the full Y plane followed by two U and V planes. And here comes the rub – the U and V planes are sub-sampled at half the resolution. So, assuming we’re dealing with a 400x240 video we first get the luminance (Y) plane at full resolution (400x240) followed by U/V planes at half the resolution (200x120). Again, this is because the information about the lightness of the picture (Y) is more important than the information about the chrominance (“colors”) of the video. In other YUV formats it’s common to assign less bits for the U and V. &lt;/p&gt;
+
+&lt;h2&gt;GL implementation&lt;/h2&gt;
+
+&lt;p&gt;In the GL implementation we particularly want to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Avoid any data processing on the software side&lt;/li&gt;
+&lt;li&gt;Avoid extra mem copies/unpacking of the data&lt;/li&gt;
+&lt;li&gt;Benefit from the hw-accelerated scaling/filtering (linear, cubic, etc.)&lt;/li&gt;
+&lt;li&gt;Get a high-quality image&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To achieve this we need to use three GL elements which are not part of the GL 1.x standard but are commonly available as extensions – &lt;strong&gt;multitexturing&lt;/strong&gt;, &lt;strong&gt;fragment programs&lt;/strong&gt; and &lt;strong&gt;rectangular texture&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Multitexturing"&gt;Multi-texturing&lt;/a&gt; allows us to use three different textures (Y, U and V plane respectively) as the source for the output image. A custom &lt;a href="http://en.wikipedia.org/wiki/Fragment_shader"&gt;fragment shader&lt;/a&gt; executes the proper blending function to create the RGB data out of the YUV source. &lt;a href="http://www.opengl.org/registry/specs/ARB/texture_rectangle.txt"&gt;Rectangular texture&lt;/a&gt; is necessary to be able to use non-power-of-two resolution source as the texture.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/11/17/yuv-pipeline.png" /&gt;&lt;/p&gt;
+
+&lt;p&gt;For the textures/planes we use a &lt;code&gt;GL_LUMINANCE&lt;/code&gt; 1-byte texture format. We also need to use a separate set of texture coordinates for each plane due to the resolution differences. The texture-filtering step (ie. during scaling) happens before the shading step so in the shader we automatically get properly filtered data (each texture separately). &lt;/p&gt;
+
+&lt;p&gt;For other YUV formats (ie. the interleaved ones) we need to do a bit more work. As the UV components are usually scattered across many triples automatic GL scaling/filtering will destroy our data before it reaches the shader. To counter that we need to first draw (with hw-accelerated conversion) to an off-screen &lt;a href="http://oss.sgi.com/projects/ogl-sample/registry/EXT/framebuffer_object.txt"&gt;FBO&lt;/a&gt;/texture and reuse that data as a native RGB texture for further rendering in the UI/scene. Alternatively one can use &lt;a href="http://oss.sgi.com/projects/ogl-sample/registry/SGIX/pbuffer.txt"&gt;pbuffers&lt;/a&gt; (less optimal performance-wise).&lt;/p&gt;
+
+&lt;h2&gt;Source code&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/11/17/yuv-gl-video.tar.gz"&gt;Here is an example program&lt;/a&gt; + source which renders a sample video (&lt;a href="http://www.nseries.com/n810"&gt;Nokia n810&lt;/a&gt; ad) using GStreamer + hardware-accelerated colorspace conversion and some effects. The example uses a rather primitive way of syncing video using timers. The proper way would be to write a decent &lt;a href="http://www.gstreamer.org"&gt;GStreamer&lt;/a&gt; video sink or extend the existing GL-sink to use fragment programs. This approach would prolly be the right way to handle video in ie. &lt;a href="http://clutter-project.org/"&gt;clutter&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;A rendering of the program output just for reference (might not show up in RSS, full resolution video can be &lt;a href="http://files.mdk.am/demos/opengl-video.avi"&gt;downloaded here&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;object id="viddler_michaldominik_36" height="370" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="437"&gt;&amp;lt;param name="movie" value="http://www.viddler.com/player/755b2fff/" /&gt;&amp;lt;param name="allowScriptAccess" value="always" /&gt;&amp;lt;param name="allowFullScreen" value="true" /&gt;&amp;lt;embed name="viddler_michaldominik_36" allowfullscreen="true" type="application/x-shockwave-flash" src="http://www.viddler.com/player/755b2fff/" allowscriptaccess="always" height="370" width="437"&gt;&amp;lt;/embed&gt;&amp;lt;/object&gt;&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-10-27:469</id>
+    <published>2007-10-27T16:39:00Z</published>
+    <updated>2007-10-27T16:39:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/10/27/curvy-blues" rel="alternate" type="text/html" />
+    <title>Curvy blues</title>
+<content type="html">
+            &lt;p&gt;I was looking in the &lt;a href="http://www.mdk.org.pl/2007/8/16/vector-drawing-opengl-polygon-tessellation"&gt;past&lt;/a&gt; (and &lt;a href="http://www.mdk.org.pl/2007/8/6/vector-drawing-opengl-shaders-and-cairo"&gt;some more&lt;/a&gt;) at various solutions for efficient hardware-aided curve rasterization methods. Those ideas mostly focused on using the graphical hardware for accelerating the geometry generation process. But what happens, when we completely skip the geometry generation step? Even more blazing performance and totally resolution-independent rendering. Thanks to some tips by &lt;a href="http://jonsmirl.googlepages.com/graphics.html"&gt;Jon&lt;/a&gt; and interesting math discussions I had in the past weeks, I’m glad to present my current thinking.&lt;/p&gt;
+
+&lt;h2&gt;Quadratic curves&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Quadratic_function"&gt;Quadratic curves&lt;/a&gt; (second-degree polynomials) consist of a starting point, an end point and one control point. Such curves cannot self-intersect nor inflect. The representation of a quadratic curve is a parabola, a straight line or (a degenerate case) – a point. Quadratic curves are not the most popular ones in modern graphical packages. Cubic types (more about them later) are the basic unit of notation. In example, &lt;a href="http://www.cairographics.org"&gt;cairo&lt;/a&gt; doesn’t provide direct quadratic API. It’s understandable as any quadratic can be trivially represented in a cubic form. However, since (due to their limited properties) quadratics are usually much faster to process it makes sense to look at them separately. Quadratics are part of the &lt;a href="http://www.w3.org/TR/SVG/paths.html#PathDataQuadraticBezierCommands"&gt;SVG standard&lt;/a&gt; and have some interesting uses – including &lt;a href="http://en.wikipedia.org/wiki/True_type"&gt;TrueType&lt;/a&gt; fonts (which are represented only with 2nd degree curves) and Flash (which uses quadratics as the native curve representation and represents cubics by subdividing them into quadratics). Few examples of quadratic curves:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/quadratic-examples.png" alt="Quadratic curve examples" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, let’s look at how we can hook up the programmable GPU hardware to rasterize quadratics. The first observation is that the three points describing the curve form a triangle and this triangle covers the whole area of the curve. Triangle is the most basicrasterization primitive in modern graphics hardware. Let’s assign two texture coordinates (&lt;em&gt;v&lt;/em&gt; and &lt;em&gt;w&lt;/em&gt;) for each of the three points. We’re going to use &lt;strong&gt;[0.0; 0.5]&lt;/strong&gt; , &lt;strong&gt;[0.0; 1.0]&lt;/strong&gt; and &lt;strong&gt;[1.0; 1.0]&lt;/strong&gt; for, respectively – the start point, the control point and the end point.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/quadratic-triangle.png" alt="Quadratic triangle" /&gt;&lt;/p&gt;
+
+&lt;p&gt;As the triangle is being rendered the hardware will interpolate &lt;em&gt;v&lt;/em&gt; and &lt;em&gt;w&lt;/em&gt; across the three vertices. For each pixel belonging to the triangle we get a unique, interpolated &lt;em&gt;v&lt;/em&gt; and &lt;em&gt;w&lt;/em&gt; texture coords pair. And here comes the crucial part – as the actual “texture” for this triangle we use a dynamic fragment program that evaluates the following expression:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/quadratic-expression_1.png" alt="Quadratic shader expression" /&gt;&lt;/p&gt;
+
+&lt;p&gt;If the expression evaluates to &lt;em&gt;true&lt;/em&gt;, we pass the pixel. If not, we discard it. What we get is:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/quadratic-shader.png" alt="Quadratic shader rendering" /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/10/27/quadratic-shader.pso"&gt;Here is a shader implementation&lt;/a&gt; that does this operation. As we see, the rastered picture represents the curve we’re trying to visualize. To be precise, we get the fill for the curve. If we replaced the &lt;em&gt;&amp;lt;&lt;/em&gt; sign with &lt;em&gt;=&lt;/em&gt; sign we would get the actual stroke (the green line). As we zoom towards the curve, the shader generates more pixels giving a more accurate representation. A true resolution-independent rendering.&lt;/p&gt;
+
+&lt;p&gt;I'm going to come back to why this is so fundamentally amazing later on, but now let's move on to the cubics.&lt;/p&gt;
+
+&lt;h2&gt;Cubic curves&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Cubic_curve"&gt;Cubics&lt;/a&gt; (third-degree polynomials, the bezier-curves) are a bit more complex. They consist of two arbitrary control points plus start/end points. As a result a cubic can self-intersect, loop, inflect or cusp. Beziers are &lt;strong&gt;the thing&lt;/strong&gt; in vector drawing and most of the data we get to render these days (icons, buttons, UI elements...) are sets of shapes defined by cubic curves.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/cubic-examples.png" alt="Cubic curve examples" /&gt;&lt;/p&gt;
+
+&lt;p&gt;For blazing-fast rendering of cubics we’re going to use a similar approach that we used for quadratics. Since cubics consist of four points we need more than a single triangle. Actually, depending on the control points set we’re dealing with, we need 2 or 3 triangles. In other words – we need to triangulate the points. In this case (very fixed) triangulation is trivial and essentially we can discover the case we have by doing a few &lt;a href="http://en.wikipedia.org/wiki/Dot_product"&gt;dot products&lt;/a&gt; between the vectors of the control points.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/cubic-triangle.png" alt="Cubic curve triangulation" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Since we’re dealing with a cubic equation, we need &lt;strong&gt;three&lt;/strong&gt; texture coordinates per point (that’s perfectly fine with the &lt;a href="http://www.opengl.org/sdk/docs/man/xhtml/glTexCoord.xml"&gt;OpenGL API&lt;/a&gt;). Let’s call those three coords: &lt;em&gt;v&lt;/em&gt;, &lt;em&gt;w&lt;/em&gt; and &lt;em&gt;t&lt;/em&gt;. In our fragment shader (&lt;a href="http://www.mdk.org.pl/assets/2007/10/27/cubic-shader.pso"&gt;implementation here&lt;/a&gt;) we’re going to evaluate the following expression:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/cubic-expression_1.png" alt="Cubic shader expression" /&gt;&lt;/p&gt;
+
+&lt;p&gt;And the last hard part – unlike quadratics, for cubics there are no static texture coords to use. We need to calculate them separately for each curve. The method to do that is a subject for a separate article, but it’s enough to say that it’s a fast fixed-time operation that involves few matrix multiplications. Essentially we need to put the control point coordinates in a matrix, move it to power basis and analyze the determinants. Depending on the number of square roots, we have one of the few distinct cubic-cases which further dictate which &lt;em&gt;v&lt;/em&gt;, &lt;em&gt;w&lt;/em&gt;, &lt;em&gt;t&lt;/em&gt; coords to use. Those computations could be put in hardware-accelerated matrix pipeline but I haven’t found that to be critical enough to do so.&lt;/p&gt;
+
+&lt;p&gt;In the end we end up with:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/cubic-shader.png" alt="Cubic shader rendering" /&gt;&lt;/p&gt;
+
+&lt;p&gt;Using this technique we can render any cubic at any resolution in a fixed time.&lt;/p&gt;
+
+&lt;h2&gt;Practical results&lt;/h2&gt;
+
+&lt;p&gt;Two following screenshots (click for bigger versions) show sample renderings (a font glyph and a mono-project logo) obtained using this method. Shapes consist of roughly 30 cubics/lines. The first figure represents the inner-mesh hardware-accelerated triangulation. The second one – a rendering of the curve data. By combining the two we end up with a final mask for the shape. This method works for any polygon including complex self-intersecting concave/convex shapes.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/10/27/gpu-rendering-font.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/gpu-rendering-font-thumb.png" alt="GPU font rendering" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/10/27/gpu-rendering-mono-logo.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/27/gpu-rendering-mono-logo-thumb.png" alt="GPU mono logo shape rendering" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2&gt;Why it’s cool&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Traditional approaches to curve rasterization usually require recursive subdividing of the curve towards a certain level of line-approximation or reaching a pixel-precision. The complexity/processing time grows exponentially and the result might be not correct. With the approach presented above we achieve high quality by keeping the mathematically-correct (not compromised) information about the curve till the very last step – the rasterization . The precision of the final image (output) is only limited by the resolution of the display system, not the implementation. The complexity of the algorithm is linear and the processing time is only constrained by the pixel fill rate of the GPU board (that value approaching hundreds of millions for modern equipment).&lt;/li&gt;
+&lt;li&gt;From my experiments, attaching the (presented) fragment shaders to the triangle rasterization process has no any impact on the performance. In other words, it seems that on modern hardware rendering a solid-filled triangle is equally fast as rendering a triangle with a simple shader.&lt;/li&gt;
+&lt;li&gt;As we’re not generating/storing any extra geometry data and just using two (max three) triangles per curve, the memory requirements are minimal – even for extremally complex shapes.&lt;/li&gt;
+&lt;li&gt;By using some additional extensions (such as a &lt;a href="http://oss.sgi.com/projects/ogl-sample/registry/EXT/compiled_vertex_array.txt"&gt;compiled vertex array&lt;/a&gt;) after the initial pre-calculation step we can completely move the geometry data to the GPU unit and render by just invoking display lists. In this case the expose events theoretically come cost-free for the CPU.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Smart curve rasterization is the first step towards efficient drawing API implementation. By combining the solution with additional dynamical GPU-programmable pipeline elements (gradients, triangulation, anti-aliasing, multi-sample rendering) we can achieve blazing-fast vector-based drawing tool. This is my current approach towards building a new OpenGL-based cairo backend. World domination follows. Obviously.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; for better math overview check &lt;a href="http://research.microsoft.com/~cloop/loopblinn05.pdf"&gt;this&lt;/a&gt; article by Loop &amp;amp; Blinn. It’s a good starting point even though it’s not complete and has certain mistakes (check comments). &lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-10-17:461</id>
+    <published>2007-10-17T17:38:00Z</published>
+    <updated>2007-10-17T17:38:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/10/17/nokia-n810-announced" rel="alternate" type="text/html" />
+    <title>Nokia N810 announced!</title>
+<content type="html">
+            &lt;p&gt;It’s announced, we did it!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.nokia.com/A4136017?category=n810#"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/10/17/n810.png" alt="Nokia n810 Internet Tablet" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://jaaksi.blogspot.com/"&gt;Ari&lt;/a&gt; has some &lt;a href="http://jaaksi.blogspot.com/2007/10/nokia-n810-announced.html"&gt;more gory details&lt;/a&gt; about what’s new and cool. From the toolkit point of view one thing worth mentioning is that we’re now running the full &lt;strong&gt;gtk-2.10&lt;/strong&gt; stack in &lt;a href="http://maemo.org/news/announcements/view/1190039774.html"&gt;Chinook&lt;/a&gt; (the OS release powering the n810). Now, there are two things to that:&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;bad&lt;/em&gt; thing is that due to the consolidation efforts the API compatibility is broken. Let me stress that again: if your application uses UI, it won’t run &lt;em&gt;at all&lt;/em&gt; on Chinook without (often trivial) modifications. We have &lt;a href="http://live.gnome.org/Hildon/TwoPointZero"&gt;documents&lt;/a&gt; and &lt;a href="https://stage.maemo.org/svn/maemo/projects/haf/trunk/hildon-audit/"&gt;tools&lt;/a&gt; to assist you in porting the applications. So go ahead, &lt;a href="http://maemo.org/development/sdks/maemo_4_0_chinook_beta_sdk.html"&gt;download Chinook beta&lt;/a&gt; and update your app – there is a lot of cool stuff in maemo garage that we need to make run on Chinook also. You can nag us on the IRC channel or mailing lists for help on specific issues. We’ll help.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;good&lt;/em&gt; thing is that we’re now very much closer to the gtk upstream and you can expect the toolkit stack to behave in a much more sane and predictable way. We’ll also now be able to actually track the API stability more closely. &lt;/p&gt;
+
+&lt;p&gt;As Ari also mentioned, Chinook is going to be available for n800 also. While it’s common for companies to provide firmware/bugfix updates for legacy hardware, it’s pretty rare to get a full new OS release + new features for free. I’m glad we did it since… well… it’s exactly the &lt;em&gt;right&lt;/em&gt; thing to do! &lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-10-14:460</id>
+    <published>2007-10-14T17:08:00Z</published>
+    <updated>2007-10-14T17:08:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/10/14/service-interrupted" rel="alternate" type="text/html" />
+    <title>Service interrupted</title>
+<content type="html">
+            &lt;p&gt;I finally manged to go through the maintenance pain and migrated my blog to a completely new system and design. I put effort into making sure that all links &amp;amp; serivces work like they did but in some corner cases the RSS feed might stop working for you. If that happens and you’re still interested in reading, please re-subscribe.&lt;/p&gt;
+
+&lt;p&gt;I’d also like to appologize to all people who commented and put their opinions on my blog in the past despite the commenting system being completely bolox. It’s finally fixed now and works as expected.&lt;/p&gt;
+
+&lt;p&gt;Sorry for the inconviences. More interesting service to follow.&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-08-16:42</id>
+    <published>2007-08-16T07:50:00Z</published>
+    <updated>2007-08-16T07:50:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/8/16/vector-drawing-opengl-polygon-tessellation" rel="alternate" type="text/html" />
+    <title>Vector drawing: OpenGL polygon tessellation</title>
+<content type="html">
+            &lt;p&gt;After having looked into the &lt;a href="http://www.mdk.org.pl/articles/2007/08/06/vector-drawing-opengl-shaders-and-cairo"&gt;hardware-accelerated bezier curve computations&lt;/a&gt; I checked something more difficult and closer to the reality: hardware-accelerated arbitrary polygon tessellation with &lt;a href="http://www.opengl.org"&gt;OpenGL&lt;/a&gt;. This topic has been covered by &lt;a href="http://zrusin.blogspot.com/2006/07/hardware-accelerated-polygon-rendering.html"&gt;Zack&lt;/a&gt; some time ago, spawning a lot of flame (as most of the &lt;a href="http://www.gnome.org"&gt;GNOME&lt;/a&gt; vs. &lt;a href="http://www.kde.org"&gt;KDE&lt;/a&gt; performance comparisons do). All benchmarks are flawed, of course. &lt;/p&gt;
+
+&lt;h2&gt;Test case&lt;/h2&gt;
+
+&lt;p&gt;I used same setup as with my previous experiment. This time I measured the real framerate to make sure that no anomaly occurs due to GL async API. Each frame of the test consists of random flowers being drawn to screen with random parameters. Each flower is a polygon outlined by eight bezier curves. The flower shape is not special/optimized in any way. Any closed polygon made out of any number of curves could be used for this purpose. Summarizing:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.notebookreview.com/default.asp?newsID=2285"&gt;Thinkpad t43&lt;/a&gt; with ATI mobility x300 card (fglrx proprietary driver with GL support)&lt;/li&gt;
+&lt;li&gt;200 flowers being drawn in each frame&lt;/li&gt;
+&lt;li&gt;Each flower has a random position, rotation, scale and fill&lt;/li&gt;
+&lt;li&gt;Fill is a linear gradient from a random RGBA color to another random RGBA color&lt;/li&gt;
+&lt;li&gt;640x480 space is used &lt;/li&gt;
+&lt;li&gt;Same set of random data was used in both examples&lt;/li&gt;
+&lt;li&gt;Anti-aliasing was turned on&lt;/li&gt;
+&lt;li&gt;cairo 1.4.10-1 was used in the cairo version&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://files.mdk.am/other/flower.tar.gz"&gt;Source code for the programs&lt;/a&gt; &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/9/24/polygon-cairo.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/polygon-cairo-thumb.png" alt="Cairo flower" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://www.mdk.org.pl/assets/2007/9/24/polygon-gl.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/polygon-gl-thumb.png" alt="OpenGL flower" /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/polygon-chart.png" alt="Performance graph" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The OpenGL rendering seems to be a pixel “fatter” than the cairo version (prolly a bug in my code). The GL output seems to be slightly brighter blended. I guess the significant difference between cairo x surface performance and cairo image surface performance also comes from the intensive blending. &lt;/p&gt;
+
+&lt;h2&gt;Optimizations&lt;/h2&gt;
+
+&lt;p&gt;Some optimizations in the GL code could be made to speed up the code even further:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Computed bezier vertices could be stored (even as compiled vertices, if available) to skip the need to generate them twice for the anti-aliasing run.&lt;/li&gt;
+&lt;li&gt;As in my prev example, vertex shader could be used to generate bezier points. That would require a different way to get the polygon extents though.&lt;/li&gt;
+&lt;li&gt;The quality of the curve approximation (detail level) doesn’t seem to affect performance much and could be increased.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;Algorithm&lt;/h2&gt;
+
+&lt;p&gt;To render the polygons I’m using a variation of the &lt;a href="http://en.wikipedia.org/wiki/Stencil_buffer"&gt;stencil-based&lt;/a&gt; algorithm described in the &lt;a href="http://www.glprogramming.com/red/chapter14.html#name13"&gt;OpenGL Red Book&lt;/a&gt;. It relies on a 1bit stencil buffer, which is commonly available. The basic method is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Disable framebuffer, enable stencil buffer &amp;amp; stencil testing.&lt;/li&gt;
+&lt;li&gt;Draw triangle fans for every vertex in the polygon with an odd-even stencil flip rule.&lt;/li&gt;
+&lt;li&gt;Enable framebuffer, disable stencil writes, keep stencil testing.&lt;/li&gt;
+&lt;li&gt;Draw anti-aliased outline of the polygon but only where the stencil bit is &lt;em&gt;not&lt;/em&gt; set (those are the anti-aliasing artifact pixels that theoretically doesn’t belong to the shape).&lt;/li&gt;
+&lt;li&gt;Switch stencil test rule to pass only when stencil bit *is* set.&lt;/li&gt;
+&lt;li&gt;Switch stencil write to zero the bit when passed (spares us a separate stencil clear call later on).&lt;/li&gt;
+&lt;li&gt;Render the actual polygon shape with ie. quad.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Worthy benefit of this approach is that it fits (works with) all the standard OpenGL matrix transformations, depth buffer testing, texturing model etc. It can be easily extended with 2d boolean operations. The CPU is not performing any calculations (except the original path calculation which can be offset to the GPU with a vertex shader). &lt;/p&gt;
+
+&lt;p&gt;Once in a while I’m getting questions how did I implement hardware-accelerated video color space conversions in &lt;a href="http://www.diva-project.org"&gt;Diva&lt;/a&gt;. I’m going to write a bit about that soon along with some boolean operations coverage. &lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-08-06:41</id>
+    <published>2007-08-06T12:52:00Z</published>
+    <updated>2007-08-06T12:52:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/8/6/vector-drawing-opengl-shaders-and-cairo" rel="alternate" type="text/html" />
+    <title>Vector drawing: OpenGL shaders and cairo</title>
+<content type="html">
+            &lt;h2&gt;The mystery&lt;/h2&gt;
+
+&lt;p&gt;Some time ago I had a chance to talk to &lt;a href="http://zrusin.blogspot.com/"&gt;Zack Rusin&lt;/a&gt; about the differences between QT and the Gnome/Gtk drawing stack. Zack was showing some impressive visual toolkit demos using tiny fractions of the CPU horse power. One of the subjects we started arguing about was using GPU hardware to perform tessellation – as opposed to &lt;a href="http://cairographics.org/"&gt;cairo&lt;/a&gt;, where tessellation happens always on the software side. The idea seemed tempting though the practical benefits were unclear to me. &lt;/p&gt;
+
+&lt;p&gt;During &lt;a href="http://www.guadec.org"&gt;GUADEC&lt;/a&gt; I poked a few people about the possibility of using &lt;a href="http://www.opengl.org"&gt;OpenGL&lt;/a&gt; and shader programs with cairo to perform hw-accelerated tessellation. I got some constructive and interesting (yet discouraging) feedback about the problems and complications related to this approach. A lot of those (highly valid) points are &lt;a href="http://blogs.gnome.org/timj/2007/07/17/17072007-opengl-for-gdkgtk/"&gt;summarized by Tim Janik in his blog&lt;/a&gt;. Still, the possible gains/performance improvements were highly unclear.&lt;/p&gt;
+
+&lt;h2&gt;Investigation&lt;/h2&gt;
+
+&lt;p&gt;I therefore decided to write a small benchmark to see what kind of speed differences we could possibly be talking about. To see if the game is worth playing at all. As the testbed I’ve chosen one of the most fundamental bits of the vector graphics – a bezier curve drawing algorithm. I implemented a 100% hw-accelerated version as a &lt;a href="http://en.wikipedia.org/wiki/Vertex_shader"&gt;vertex shader program&lt;/a&gt; running on the GPU. I compared it against cairo software version in two scenarios – using xsurface and image surface. The following setup was used for the test:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.notebookreview.com/default.asp?newsID=2285"&gt;Thinkpad t43&lt;/a&gt; with ATI mobility x300 card (fglrx proprietary driver with GL support)&lt;/li&gt;
+&lt;li&gt;A time to draw 100 random (pre-generated) bezier curves was measured&lt;/li&gt;
+&lt;li&gt;Curves were randomized in a 640x480 space with a random width (1-10pixels) and a random color (red, green, blue, alpha)&lt;/li&gt;
+&lt;li&gt;Same set of random curves was used in both examples&lt;/li&gt;
+&lt;li&gt;Anti-aliasing was turned off&lt;/li&gt;
+&lt;li&gt;An best of 3 test runs was taken&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://files.mdk.am/other/bezier.tar.gz"&gt;Source code&lt;/a&gt; (&lt;a href="http://developer.nvidia.com/object/cg_toolkit.html"&gt;CG toolkit&lt;/a&gt; from NVidia is needed to compile the shader program)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/9/24/bezier-cairo.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/bezier-cairo-thumb.png" alt="Cairo bezier" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://www.mdk.org.pl/assets/2007/9/24/bezier-shader.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/bezier-shader-thumb.png" alt="Shader bezier" /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://www.mdk.org.pl/assets/2007/9/24/flower-cairo.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/flower-cairo-thumb_1.png" alt="Cairo flower" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://www.mdk.org.pl/assets/2007/9/24/flower-shader.png"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/flower-shader-thumb_1.png" alt="Shader flower" /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/bezier-chart.png" alt="Performance graph" /&gt;&lt;/p&gt;
+
+&lt;p&gt;The rough-rough result of the test is that drawing using hardware opengl tessellation is 30 times faster than current software cairo implementation. By overlying the resulting images in ie. GIMP one can see tiny pixel differences between the two implementations (cairo implementation begin prolly more accurate) but essentially it’s the same thing. The OpenGL shader implementation is not optimized at all and could be made faster by using a geometry shader instead of a vertex shader.&lt;/p&gt;
+
+&lt;h2&gt;Not only about speed&lt;/h2&gt;
+
+&lt;p&gt;Using GPU to perform things normally happening on the CPU has one additional advantage – it frees the processor to do other things. In my setup, with the cairo implementation drawing random curves as fast as possible, I can get a ~10fps animation (100 curves per frame). This keeps the CPU busy at 100% and the framerate will drop as soon as CPU starts doing anything else. &lt;/p&gt;
+
+&lt;p&gt;With my 100% GPU implementation I get around 400fps and the CPU usage never goes beyond the 30% threshold (lots of it being the random-number generation I presume). &lt;/p&gt;
+
+&lt;h2&gt;Caveats&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;OpenGL shader program support is not yet a commodity, even though it’s coming fast even to the mobile space (ie. &lt;a href="http://www.imgtec.com/PowerVR/Products/Graphics/MBX/index.asp"&gt;MBX&lt;/a&gt; chip having vertex shader support and the &lt;a href="http://www.imgtec.com/PowerVR/Products/Graphics/SGX/index.asp"&gt;SGX&lt;/a&gt; chip having a full set of pixel/vertex/geometry shaders support).&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://blogs.gnome.org/timj/2007/07/17/17072007-opengl-for-gdkgtk/"&gt;As Tim pointed out&lt;/a&gt;, OpenGL implementations vary and per-implementation fine tuning might be in order&lt;/li&gt;
+&lt;li&gt;To efficiently use shader programs one needs a full OpenGL-based drawing stack&lt;/li&gt;
+&lt;li&gt;Shader programs + math + drawing algorithms are hard&lt;/li&gt;
+&lt;li&gt;OpenGL drivers suck on Linux&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I still think that the results are interesting though. I quickly hacked another shader implementation to draw solid-filled bezier shapes (more about that soon). The performance differences seem to be even bigger. My gut feeling here is that the programmable hardware drawing might be the only way to go for the resolution-independent fully vector-drawn UI’s. Especially on the mobile where the CPU power is scarce, it scales badly, and everything that doesn’t throttle the processor means longer battery life.&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-07-12:40</id>
+    <published>2007-07-12T15:42:00Z</published>
+    <updated>2007-07-12T15:42:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/7/12/guadec-2007" rel="alternate" type="text/html" />
+    <title>GUADEC 2007</title>
+<content type="html">
+            &lt;p&gt;I’ll be attending &lt;a href="http://www.guadec.org"&gt;GUADEC&lt;/a&gt; this year in Birmingham. During the tutorial day (Friday) I’ll be giving a practical introduction to the &lt;a href="http://www.maemo.org"&gt;maemo&lt;/a&gt; UI and showing some key differences from the full-blown desktop &lt;a href="http://www.gnome.org"&gt;GNOME&lt;/a&gt; interface. If you’re an application developer and you’d like to learn few new quirks about making your software feel responsive and look good on the mobile – please do come. &lt;/p&gt;
+
+&lt;p&gt;There is quite a bunch of us from &lt;a href="http://www.nokia.com"&gt;nokia&lt;/a&gt; coming to the event including a strong representation of our magnificent three-letter tookit team starring &lt;a href="http://oluc.blogspot.com"&gt;luc&lt;/a&gt;, &lt;a href="http://blogs.gnome.org/tko"&gt;tko&lt;/a&gt;, &lt;a href="http://www.gnome.org/~fherrera/blog"&gt;fer&lt;/a&gt;, &lt;a href="http://blogs.gnome.org/xan"&gt;xan&lt;/a&gt; and &lt;a href="http://www.mdk.org.pl"&gt;mdk&lt;/a&gt;. Great chance to poke us about our future plans regarding hildon, bitch about &lt;a href="http://sardine.garage.maemo.org"&gt;sardine&lt;/a&gt; and discuss some revolutionary UI ideas you might have for the internet tablets. “Hildon – now open more than ever!”. Ehm.&lt;/p&gt;
+
+&lt;p&gt;See you in the UK.&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-04-23:39</id>
+    <published>2007-04-23T15:14:00Z</published>
+    <updated>2007-04-23T15:14:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/4/23/chapter-1-in-which-we-meet-graff" rel="alternate" type="text/html" />
+    <title>Chapter #1 in which we meet Graff</title>
+<content type="html">
+            &lt;p&gt;Long time, no news.&lt;/p&gt;
+
+&lt;p&gt;I’m working now on a (new) set of libraries called Graff. Graff is a lighweight high-performance graphics rendering library. I guess it falls into the category of &lt;em&gt;canvas&lt;/em&gt; – as currently discussed on the &lt;a href="http://mail.gnome.org/archives/gtk-devel-list/2007-April/msg00076.html"&gt;gtk mailing list&lt;/a&gt;. It’s a bit more generic though and focused on providing ways of &lt;em&gt;animating graphical elements over time&lt;/em&gt;.  It knows about motion paths, timelines, animating parameters, etc. The use case here is building new rich custom UI’s, providing a building-block for higher-level toolkits and abstracting hardware-specific quirks. It provides a basic model-view-controller environment with the UI elements (“faces”) being cleanly separated from the “motors” driving them. “Touches” provide event sources. &lt;/p&gt;
+
+&lt;p&gt;Graff can currently render using two runtime-selectable backends – a hardware-accelerated OpenGL backend or a software-only driver. The software backend is extremelly highly optimized using all the ugly demo-scene tips&amp;amp;tricks straight form the ‘90ties. It performs suprisingly well and the demo applications mentioned below can actually run good on our existing hardware (nokia 770, nokia n800). &lt;/p&gt;
+
+&lt;p&gt;Speaking of demos, I made a few simplistic test applications to sketch the idea of what Graff can already do. Video recordings available below. It’s a work in progress, early on. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://files.mdk.am/demos/graff-demo-1.avi"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/graff_demo_1.png" alt="Graff Demo 1" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://files.mdk.am/demos/graff-demo-2.avi"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/graff_demo_2.png" alt="Graff Demo 2" /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://files.mdk.am/demos/graff-demo-3.avi"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/graff_demo_3.png" alt="Graff Demo 3" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://files.mdk.am/demos/graff-demo-4.avi"&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/graff_demo_4.png" alt="Graff Demo 4" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Image viewer:&lt;/strong&gt; a basic image viewer controlled with thumbs.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Dancing emotes:&lt;/strong&gt; an example showing objects running along morphable paths.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Scrolling list:&lt;/strong&gt; contact list with inertia scrolling. &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Drag:&lt;/strong&gt; trivial drag and drop with some smooth blending.&lt;/p&gt;
+
+&lt;p&gt;The image viewer example uses &lt;a href="http://www.flickr.com/photos/jakubsteiner/"&gt;Jakub’s&lt;/a&gt; nice photos. Icons come from our awsome &lt;a href="http://tango.freedesktop.org/Tango_Desktop_Project"&gt;Tango artists&lt;/a&gt;. &lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-02-22:38</id>
+    <published>2007-02-22T14:01:00Z</published>
+    <updated>2007-02-22T14:01:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/2/22/fosdem-2007" rel="alternate" type="text/html" />
+    <title>Fosdem 2007</title>
+<content type="html">
+            &lt;p&gt;There is a few of us from &lt;a href="http://www.nokia.com"&gt;nokia&lt;/a&gt; coming to &lt;a href="http://www.fosdem.org"&gt;fosdem&lt;/a&gt;, Brussels. Catch us to chat about gtk, hildon and &lt;a href="http://www.maemo.org"&gt;maemo&lt;/a&gt;. Or we’ll catch you.&lt;/p&gt;
+
+&lt;p&gt;I also released nflick 0.4.0 – a &lt;a href="http://www.flickr.com"&gt;flickr&lt;/a&gt; browser for the maemo platform. Binaries for &lt;strong&gt;scirocco&lt;/strong&gt; and &lt;strong&gt;bora&lt;/strong&gt; can be found &lt;a href="https://garage.maemo.org/projects/nflick/"&gt;at the usual place&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;Main changes are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Adding hw-keys navigation to fullscreen view&lt;/li&gt;
+&lt;li&gt;Pressing “escape” key while viewing a photo will return to the photo list&lt;/li&gt;
+&lt;li&gt;Worker dialogs have now proper transiency so they don’t block whole device&lt;/li&gt;
+&lt;li&gt;Other dialogs have now proper transiency too&lt;/li&gt;
+&lt;li&gt;Fixing the bad-paging bug for good&lt;/li&gt;
+&lt;/ul&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-02-13:37</id>
+    <published>2007-02-13T14:23:00Z</published>
+    <updated>2007-02-13T14:23:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/2/13/maemo-theming" rel="alternate" type="text/html" />
+    <title>Maemo theming</title>
+<content type="html">
+            &lt;p&gt;A bit old news, but &lt;a href="http://www.tigert.com/"&gt;Tuomas&lt;/a&gt; recently released a new version of his awesome &lt;a href="http://www.tigert.com/archives/2007/01/30/new-maemo-development-theme/"&gt;plankton theme&lt;/a&gt;. Judging by the comments on his blog and the screenshots posted on planet maemo, It looks like the theme is liked and appreciated.  &lt;/p&gt;
+
+&lt;p&gt;I also find tigert’s theme aesthetically pleasing and nicely-balanced. It reminds me of a well-formed piece of metal that just feels good in the hands. This is, quite unfortunately, in contrast to default n800 stock themes that remind me of &lt;a href="http://www.epartyunlimited.com/mirrorballs.html"&gt;disco mirror balls&lt;/a&gt; and &lt;a href="http://en.wikipedia.org/wiki/German_Democratic_Republic"&gt;DDR&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;I sometimes have a feeling that the psychological effect of good theming artwork (understood as well-drawn artwork) is underestimated. After all, this is what the user of the product is going to be living with on a daily basis. It’s the face of the device. It can cover-up for many shortcomings of the software or badly expose them – very much like a pretty-faced girl can often cover up for a plump figure (it doesn’t seem to work the other way round, does it?).&lt;/p&gt;
+
+&lt;p&gt;For developing the themes we created a system that decouples the layouts from the actual graphics. The &lt;a href="https://stage.maemo.org/svn/maemo/projects/haf/trunk/hildon-theme-layout-4/"&gt;layout&lt;/a&gt; contains the common gtkrc styles and other internal bits shared among all themes. The graphics consists of a single &lt;a href="https://stage.maemo.org/svn/maemo/projects/haf/trunk/hildon-theme-plankton/template/template.png"&gt;template file&lt;/a&gt; that can be easily handled by the artist. A set of &lt;a href="https://stage.maemo.org/svn/maemo/projects/haf/trunk/hildon-theme-tools/"&gt;tools&lt;/a&gt; can be used for various helper tasks. &lt;/p&gt;
+
+&lt;p&gt;&lt;img src="http://www.mdk.org.pl/assets/2007/9/24/theme_diagram.png" alt="Theming diagram" /&gt;&lt;/p&gt;
+
+&lt;p&gt;This dual system is very much similar to the libraries vs. applications in software development. Library (layout) contains some common bits shared among all applications (themes). &lt;/p&gt;
+
+&lt;p&gt;The only things missing in this system is some documentation – so that someone can actually use it. Coming soon. &lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-02-04:36</id>
+    <published>2007-02-04T13:56:00Z</published>
+    <updated>2007-02-04T13:56:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/2/4/mono-on-maemo" rel="alternate" type="text/html" />
+    <title>Mono on maemo</title>
+<content type="html">
+            &lt;p&gt;I’ve created some tarballs and a &lt;a href="http://www.maemo.org/maemowiki/mono"&gt;wiki page&lt;/a&gt; describing the process of getting &lt;a href="http://www.mono-project.org"&gt;mono&lt;/a&gt; to work on nokia 770/n800. The solution is a bit dirty &amp;amp; temporary – but works. &lt;/p&gt;
+
+&lt;p&gt;The biggest limitation now (besides the packaging) is the lack of working Hildon C# bindings. If someone would like to improve the situation, please work against the &lt;a href="https://stage.maemo.org/svn/maemo/projects/haf/branches/hildon-libs/hildon-1/"&gt;new hildon 1.0.0 branch&lt;/a&gt; which should work smoothly with the gapi parser.&lt;/p&gt;
+
+&lt;p&gt;Comments are welcome on our &lt;a href="https://maemo.org/mailman/listinfo/maemo-developers"&gt;mailing list&lt;/a&gt; .&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-01-28:35</id>
+    <published>2007-01-28T08:40:00Z</published>
+    <updated>2007-01-28T08:40:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/1/28/clone-wars" rel="alternate" type="text/html" />
+    <title>Clone wars</title>
+<content type="html">
+            &lt;p&gt;&lt;a href="http://www.flickr.com/photos/michaeldominic/372018046/"&gt;&lt;img src="http://farm1.static.flickr.com/164/372018046_3cb84cc06d_m.jpg" alt="Mono eye 1" /&gt;&lt;/a&gt; &amp;nbsp; &lt;a href="http://www.flickr.com/photos/michaeldominic/372015630/"&gt;&lt;img src="http://farm1.static.flickr.com/129/372015630_fd61731f1f_m.jpg" alt="Mono eye 2" /&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href="http://www.flickr.com/photos/michaeldominic/372018049/"&gt;tag their girlfriend photos with a ‘monkey’ tag&lt;/a&gt;. &lt;/p&gt;
+
+&lt;p&gt;In any case this simple application does something “real” and useful:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A little bit of network http access&lt;/li&gt;
+&lt;li&gt;A little bit of regexp for RSS parsing&lt;/li&gt;
+&lt;li&gt;A little bit of threading (the photo is downloaded in a separate thread)&lt;/li&gt;
+&lt;li&gt;A little bit of gtk&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;…and all this stuff works nicely on all the four mentioned platforms.&lt;/p&gt;
+
+&lt;p&gt;I don’t think being cross-platform is the biggest advantage of mono, but I smell some interesting opportunities here.&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-01-21:34</id>
+    <published>2007-01-21T14:37:00Z</published>
+    <updated>2007-01-21T14:37:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/1/21/m-is-for-monkey" rel="alternate" type="text/html" />
+    <title>M is for monkey</title>
+<content type="html">
+            &lt;p&gt;&lt;a href="http://www.flickr.com/photos/michaeldominic/363791993/"&gt;&lt;img src="http://farm1.static.flickr.com/132/363791993_93eb62a735.jpg" alt="Mono" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;A while back &lt;a href="http://www.advogato.org/person/lupus/diary.html?start=20"&gt;lupus&lt;/a&gt; did a great job of porting &lt;a href="http://www.mono-project.org"&gt;mono&lt;/a&gt; to run on &lt;strong&gt;arm&lt;/strong&gt;. I did some raw experimenting over the weekend and managed to get the whole C# gtk stack running on the &lt;a href="http://www.nokia.com/n800"&gt;N800&lt;/a&gt;. The initial impressions are very positive – pretty fast startup time, low memory usage.&lt;/p&gt;
+
+&lt;p&gt;Since now all the bits are figured out, the only thing left to do is the boring task – correct packaging &amp;amp; handling of the whole debian mono tree. We clearly need a &lt;a href="http://www.gnome.org/~fherrera/"&gt;real hero&lt;/a&gt; here…&lt;/p&gt;
+          </content>  </entry>
+  <entry xml:base="http://www.mdk.org.pl/">
+    <author>
+      <name>MDK</name>
+    </author>
+    <id>tag:www.mdk.org.pl,2007-01-08:33</id>
+    <published>2007-01-08T14:56:00Z</published>
+    <updated>2007-01-08T14:56:00Z</updated>
+    <link href="http://www.mdk.org.pl/2007/1/8/next-step-moon" rel="alternate" type="text/html" />
+    <title>Next step: moon</title>
+<content type="html">
+            &lt;p&gt;&lt;a href="http://www.flickr.com/photos/michaeldominic/350897368/"&gt;&lt;img src="http://farm1.static.flickr.com/159/350897368_7020ee4752.jpg?v=1168294942" alt="N800" /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nokia &lt;a href="http://www.nseries.com/n800"&gt;N800&lt;/a&gt; is out, we just released it!&lt;/p&gt;
+
+&lt;p&gt;This is not the most sexy-looking babe in town, but she has a lot of punch and she’ll get you through the night, the day and all the other horrible stories. &lt;a href="http://www.youtube.com/"&gt;YouTube&lt;/a&gt; works, &lt;a href="http://www.teemuharju.net/2007/01/08/skype-coming-from-n800/"&gt;skype is coming&lt;/a&gt;. The gorgeous high-resolution display rocks hard and is easily the best display in this kind of consumer electronics. &lt;/p&gt;
+
+&lt;p&gt;Oh, and there is a &lt;a href="http://www.maemo.org/#date_07012007a"&gt;developer program&lt;/a&gt; availible so that all the naughty kids that like to tinker with things can get a device for a mere 99 euros. 500 devices are available this way. That’s a lot I’d say!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href="http://www.maemo.org"&gt;Maemo&lt;/a&gt; kicks. &lt;a href="http://www.maemo.org/community/mailing-lists.html"&gt;Join&lt;/a&gt; now. &lt;/p&gt;
+          </content>  </entry>
+</feed>

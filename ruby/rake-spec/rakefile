@@ -1,0 +1,14 @@
+require 'spec/rake/spectask'
+
+task :default => [:spec]
+
+desc "Run all specs"
+Spec::Rake::SpecTask.new('spec') do |task|
+  task.libs << 'src'
+  task.spec_files = FileList['spec/*.rb']
+end
+
+task :run do
+  ruby 'src/dog.rb'
+end
+

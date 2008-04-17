@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'gtk2'
+
+class MyButton < Gtk::Button
+
+  def initialize
+    super('MyButton')
+    signal_connect('clicked') { puts 'Clicked!' }
+  end
+
+end
+
+class MyWindow < Gtk::Window
+
+  def initialize
+    super
+    self.border_width = 6
+
+    @button = MyButton.new
+    add(@button)
+
+    signal_connect('destroy') { Gtk.main_quit }
+  end
+
+end
+
+win = MyWindow.new
+win.show_all
+
+Gtk.main

@@ -1,0 +1,9 @@
+task :default => [:run, :doc]
+
+task :run do
+  ruby 'sample.rb'
+end
+
+task :doc do
+  `rdoc`
+end
