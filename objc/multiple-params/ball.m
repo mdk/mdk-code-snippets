@@ -9,12 +9,11 @@
 
 - (Ball *) initWithColor: (NSString *) c andMaterial: (NSString *) m 
 {
-	self = [super init];
-
-	if (self) {
-		color = [[NSString alloc] initWithString: c];
-		material = [[NSString alloc] initWithString: m];
-	}
+	if (! [super init]) 
+		return nil;
+	
+	color = [[NSString alloc] initWithString: c];
+	material = [[NSString alloc] initWithString: m];
 
 	return self;
 }
