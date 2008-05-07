@@ -11,25 +11,24 @@
 		printf ("Bottle is closed\n");
 }
 
-+ (id) closedBottle
++ (Bottle*) closedBottle
 {
-	return [[[Bottle alloc] init] autorelease];
+	return [[[[self class] alloc] init] autorelease];
 }
 
-+ (id) openedBottle
++ (Bottle*) openedBottle
 {
-	id bottle = [[[Bottle alloc] init] autorelease];
+	id bottle = [[[self class] alloc ] init];
 	[bottle open: nil];
-	return bottle;
+	return [bottle autorelease];
 }
 
-- (id) init
+- (Bottle*) init
 {
-	self = [super init];
+	if (! [super init])
+		return nil;
 
-	if (self) {
-		opened = NO;
-	}
+	opened = NO;
 
 	return self;
 }
@@ -47,7 +46,7 @@
 	}
 	
 	if (error)
-		error = nil;
+		*error = nil;
 
 	opened = YES;
 }

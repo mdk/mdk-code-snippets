@@ -16,7 +16,7 @@ int main (int argc, const char *argv[])
 	[b2 print];
 	[b3 print];
 
-	NSLog (@"Try doing something...");
+	NSLog (@"Trying to open some...");
 	NSError *error = nil;
 	
 	[b1 open: &error];

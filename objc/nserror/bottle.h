@@ -6,9 +6,9 @@
 	BOOL opened;
 }
 
-+ (id) closedBottle;
-+ (id) openedBottle;
-- (id) init;
++ (Bottle*) closedBottle;
++ (Bottle*) openedBottle;
+- (Bottle*) init;
 - (void) print;
 - (void) open: (NSError **) error;
 
