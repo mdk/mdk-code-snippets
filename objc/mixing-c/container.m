@@ -4,12 +4,11 @@
 
 - (Container *) init: (NSString *) n
 {
-	self = [super init];
-
-	if (self) {
-		name = [[NSString alloc] initWithString: n];
-		buffer = alloc_buffer (100);
-	}
+	if (! [super init]) 
+		return nil;
+	
+	name = [[NSString alloc] initWithString: n];
+	buffer = alloc_buffer (100);
 
 	return self;
 }
