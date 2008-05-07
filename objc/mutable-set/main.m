@@ -13,7 +13,7 @@ int main (int argc, const char *argv[])
 	[set addObject: [[[Device alloc] initWithName: @"Hat"] autorelease]];
 	[set addObject: [[[Device alloc] initWithName: @"Sword of doom"] autorelease]];
 
-	NSEnumerator *e = [set objectEnumerator];
+	id e = [set objectEnumerator];
 	Device *obj;
 	while (obj = [e nextObject]) {
 		[obj print];

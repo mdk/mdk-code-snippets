@@ -7,11 +7,11 @@
 }
 
 - (Device *) initWithName: (NSString *) n {
-	self = [super init];
 
-	if (self) {
-		name = [[NSString alloc] initWithString: n];
-	}
+	if (! [super init]) 
+		return nil;
+
+	name = [[NSString alloc] initWithString: n];
 
 	return self;
 }
