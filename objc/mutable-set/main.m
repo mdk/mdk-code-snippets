@@ -19,6 +19,9 @@ int main (int argc, const char *argv[])
 		[obj print];
 	}
 
+	// Another way of doing same thing...
+	[set makeObjectsPerformSelector: @selector (print)];
+
 	[set release];
 	[pool release];
 	return 0;
