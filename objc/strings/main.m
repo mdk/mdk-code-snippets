@@ -17,7 +17,13 @@ int main (int argc, const char *argv[])
   // Creating a string from UTF8 string using std alloc
   NSString *str4 = [[NSString alloc] initWithUTF8String: "Another UTF8 string"];
 
-  NSLog (@"str1: %@ str2: %@ str3: %@ str4: %@", str1, str2, str3, str4);
+  // Creating a string with some formatting using convienience constructor
+  NSString *str5 = [NSString stringWithFormat: @"A string with formatted number... %d", 666];
+
+  // Creating a string with some formatting using convienience constructor
+  NSString *str6 = [[NSString alloc] initWithFormat: @"Another string with formatted number... %d", 666];
+
+  NSLog (@"str1: %@ str2: %@ str3: %@ str4: %@ str5: %@ str6: %@", str1, str2, str3, str4, str5, str6);
 
   // Doing double from string
   NSString *doubleString = @"3.14";
@@ -49,6 +55,7 @@ int main (int argc, const char *argv[])
   NSLog (@"Fixed string is: '%@'", fixedString);
 
   [str4 release];
+  [str6 release];
   [pool release];
   return 0;
 }
