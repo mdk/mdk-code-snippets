@@ -24,11 +24,11 @@ int main (int argc, const char *argv[])
   }
 
   // Using handles...
-  NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath: @"output.raw"];
+  NSFileHandle *handle = [NSFileHandle fileHandleForWritingAtPath: @"output_1.raw"];
   [handle writeData: data];
 
   // Using NSData...
-  [data writeToFile: @"output.raw" atomically: NO];
+  [data writeToFile: @"output_2.raw" atomically: NO];
 
   [pool release];
   return 0;
