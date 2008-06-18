@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+# Converts tabs to spaces
+# Also strips trailing whitespace
+
+@@replacement = "    " # Four spaces
+
+def recursively_match (text_line)
+  if text_line =~ /\t/
+    text_line = text_line.gsub(/\t/, @@replacement)
+    text_line = recursively_match(text_line)
+  end
+  
+  return text_line
+end
+
+def kill_whitespace(text_line)
+  if text_line =~ /\s+$/
+    text_line= text_line.gsub(/\s+$/, "")
+  end
+  
+  return text_line
+end
+
+def parse_file (file)
+  data = File.read(file)
+  out = File.open(file, "w")
+  
+  data.each_line { |line|
+    line = kill_whitespace(line)
+    line = recursively_match(line)
+    out.puts line
+  }
+end
+
+ARGV.each { |arg|
+  puts "Converting #{arg} ..."
+  parse_file(arg)
+}
+
