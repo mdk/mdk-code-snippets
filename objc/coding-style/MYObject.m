@@ -31,16 +31,15 @@
 	NSLog(@"Doing something...");
 }
 
-- (NSString *) name
+- (NSString *)name
 {
 	return name;
 }
 
-- (void) setName:(NSString *) aName
+- (void)setName:(NSString *) aName
 {
 	[name autorelease];
 	name = [aName retain];
 }
 
 @end
-

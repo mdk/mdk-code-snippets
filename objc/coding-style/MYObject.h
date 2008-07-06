@@ -14,7 +14,7 @@
 			andMany:(NSString *) two
 		 parameters:(BOOL) flag;
 
-- (NSString *) name;
-- (void) setName:(NSString *) aName;
+- (NSString *)name;
+- (void)setName:(NSString *) aName;
 
 @end
