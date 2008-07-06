@@ -38,8 +38,9 @@
 
 - (void)setName:(NSString *) aName
 {
-	[name autorelease];
-	name = [aName retain];
+	[aName retain];
+	[name release];
+	name = aName;
 }
 
 @end
