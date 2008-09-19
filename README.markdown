@@ -6,3 +6,4 @@ The only reason for having those is to help my flaky memory and allow me to poin
 
 You're encouraged to do whatever you want with the code here. All stuff is MIT X11 license *except* if otherwise noted in the header.
 
+The javascript examples require the firebug firefox extension for printing stuff to the console. 
