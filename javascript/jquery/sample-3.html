@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+    
+    var live_data = "http://download.finance.yahoo.com/d/quotes.csv?s=EURPLN=X&f=sl1d1t1c1ohgv&e=.csv"
+    
+    function on_data_loaded (data)
+    {
+    	var params = data.split (',');
+    	$("a").text (params [1]);
+    }
+        
+    function on_ready_event ()
+    {
+      $.get (live_data, on_data_loaded);
+    }
+
+    $(document).ready(on_ready_event);
+    </script>
+  </head>
+  
+  <body>
+    <a href="http://finance.yahoo.com/q?s=EURPLN=X">Fetching...</a>
+  </body>
+
+</html>

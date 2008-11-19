@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript">
+    function on_ready_event ()
+    {
+      $("a").click(on_click_event);
+    }
+
+    function on_click_event ()
+    {
+      alert("You clicked the link!");
+      return false;
+    }
+  
+    $(document).ready(on_ready_event);
+    </script>
+  </head>
+  
+  <body>
+    <a href="http://jquery.com/">jQuery</a>
+  </body>
+
+</html>
