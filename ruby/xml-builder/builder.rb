@@ -13,7 +13,7 @@ xml.title "This is a title element"
 xml.author "Michael Dominic K.", :gender => "male"
 
 # Complex/nested elements writing
-xml.content {
+xml.content(:type => 'book') {
   xml.page1 "First piece"
   xml.page2 "Second piece"
   xml.page3 "Third piece"
