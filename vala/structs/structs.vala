@@ -18,12 +18,12 @@ public class Hello : Object
         ts.b = 20;
         ts.c = "Hello World!";
 
-        stdout.printf("Original: " + ts.c + "\n");
+        stdout.printf("Original: %s\n", ts.c);
         hello.prop = ts;
 
         ts.c = "I was changed!";
-        stdout.printf("After change: " + ts.c + "\n");
-        stdout.printf("On object: " + hello.prop.c + "\n");
+        stdout.printf("After change: %s\n", ts.c);
+        stdout.printf("On object: %s\n", hello.prop.c);
 
         return 0;
     }
