@@ -6,6 +6,7 @@ public class BasicObject : Object
     {
         Knife kf = new Knife();
         kf.use();
+        stdout.printf("Knife price: %d\n", kf.price);
         return 0;
     }
 }
