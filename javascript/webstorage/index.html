@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<title>WebStorage</title>
+	<script type="text/javascript" language="javascript" charset="utf-8">
+	// <![CDATA[
+	var db;
+
+	if (! window.openDatabase) {
+		alert("No database functionalities!");
+	} else {
+		db = window.openDatabase("WebStorageTest", "1.0", "HTML5 Database API example", 200000);
+		if (!db)
+			alert("Could not open database!");
+	}
+	// ]]>
+	</script>
+</head>
+</html>
