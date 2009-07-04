@@ -1,2 +1,2 @@
 hello-world:
-	valac -o hello-word hello-world.vala
+	valac -o hello-world hello-world.vala
