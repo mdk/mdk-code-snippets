@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <script type="text/javascript">
+
+    Function.prototype.bind = function bind(obj) {
+      var self = this;
+      return function() {
+        return self.apply(obj, arguments);
+      }
+    }
+    
+    var o = new Object();
+    o.name = "Martin";
+    o.presentSelf = function() {
+      alert("Hey, my name is: " + this.name);
+    }
+
+    document.addEventListener('DOMContentLoaded', o.presentSelf.bind(o), false);
+    </script>
+  </head>
+  
+  <body>
+  </body>
+
+</html>
