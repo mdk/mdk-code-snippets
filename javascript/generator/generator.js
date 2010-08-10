@@ -1,49 +1,55 @@
-function Controller(type) {
-  this.rootElement = document.createElement(type);
-  this.controllers = {};
-}
-
-Controller.prototype.className = function(cls) {
-  this.rootElement.className = cls;
+HTMLElement.prototype.$className = function(cls) {
+  this.className = cls;
   return this;
 }
 
-Controller.prototype.content = function(c) {
-  this.rootElement.innerHTML = c;
+HTMLElement.prototype.$content = function(c) {
+  this.innerHTML = c;
   return this;
 }
 
-Controller.prototype.children = function() {
+HTMLElement.prototype.$children = function() {
   var l = arguments.length;
   var argument;
   var i, key;
   
   for (i = 0; i < l; i++) {
     argument = arguments[i];
-    this.rootElement.appendChild(argument.rootElement);
-    for (key in argument.controllers) {
-      this.controllers[key] = argument.controllers[key];
+    this.appendChild(argument);
+    
+    if (argument.$elements && ! this.$elements) {
+      this.$elements = {};
     }
+    
+    for (key in argument.$elements) {
+      this.$elements[key] = argument.$elements[key];
+    }
+    
+    argument.$elements = null;
   }
   
   return this;
 }
 
-Controller.prototype.name = function(name) {
-  this.controllers[name] = this;
+HTMLElement.prototype.$name = function(name) {
+  if (! this.$elements) {
+    this.$elements = {};
+  }
+    
+  this.$elements[name] = this;
   return this;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
   
-  var ctrl = new Controller('ul').children(
-    new Controller('li').content('First item').name('first'), 
-    new Controller('li').content('Second item')
-  ).className('lista');
+  var ctrl = document.createElement('ul').$children(
+    document.createElement('li').$content('First item').$name('first'), 
+    document.createElement('li').$content('Second item')
+  ).$className('lista');
   
-  ctrl.controllers['first'].rootElement.innerHTML = "Modified";
+  ctrl.$elements['first'].innerHTML = "Modified";
 
-  document.body.appendChild(ctrl.rootElement);
+  document.body.appendChild(ctrl);
     
 }, false);
 
