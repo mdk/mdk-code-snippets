@@ -43,5 +43,5 @@ int main (int argc, char **argv)
     glOrtho(0, 320, 240, 0, -1000.0, 1000.0);
 
     glutMainLoop();
-    return 0; 
+    return 0;
 }
